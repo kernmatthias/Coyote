@@ -41,7 +41,7 @@ proc cr_bd_design_static { parentCell } {
   ########################################################################################################
   set bCheckIPs 1
   if { $bCheckIPs == 1 } {
-     set list_check_ips "\ 
+     set list_check_ips "\
   xilinx.com:ip:clk_wiz:6.0\
   xilinx.com:ip:proc_sys_reset:5.0\
   xilinx.com:ip:util_ds_buf:[expr {($cnfg(fdev) eq "u55c") ? "2.2":"2.1"}]\
@@ -106,7 +106,7 @@ proc cr_bd_design_static { parentCell } {
 ########################################################################################################
 # Create interface ports
 ########################################################################################################
-  
+
   # Static config
   set axi_cnfg [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:aximm_rtl:1.0 axi_cnfg ]
   set_property -dict [ list \
@@ -117,7 +117,7 @@ proc cr_bd_design_static { parentCell } {
 
   # XDMA status
   set dsc_status [ create_bd_intf_port -mode Master -vlnv xilinx.com:display_xdma:xdma_status_ports_rtl:1.0 dsc_status ]
-  
+
   # PCIe
   set pcie_clk [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_clock_rtl:1.0 pcie_clk ]
   set_property -dict [ list \
@@ -192,13 +192,13 @@ proc cr_bd_design_static { parentCell } {
                 if {$i != $cnfg(n_xchan) - 1} {
                   append cmd ":"
                 }
-              } 
+              }
               append cmd "} \
               CONFIG.ASSOCIATED_RESET {xresetn} \
               ] \$xclk"
   eval $cmd
   set_property CONFIG.ASSOCIATED_RESET {xresetn:xresetn} [get_bd_ports /xclk]
-  
+
   # PR reset
   set presetn [ create_bd_port -dir O -type rst presetn ]
 
@@ -268,24 +268,24 @@ proc cr_bd_design_static { parentCell } {
 
   create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic:2.0 util_vector_logic_0
   set_property -dict [list CONFIG.C_SIZE {1} CONFIG.C_OPERATION {and} CONFIG.LOGO_FILE {data/sym_orgate.png}] [get_bd_cells util_vector_logic_0]
- 
+
   #set util_ds_buf [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf:[expr {($cnfg(fdev) eq "u55c") ? 2.2:2.1}] util_ds_buf ]
   set util_ds_buf [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf util_ds_buf ]
 
   # Reset
   create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0
-  set_property -dict [list CONFIG.CONST_VAL {1}] [get_bd_cells xlconstant_0] 
+  set_property -dict [list CONFIG.CONST_VAL {1}] [get_bd_cells xlconstant_0]
 
   create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_1
-  set_property -dict [list CONFIG.CONST_VAL {1}] [get_bd_cells xlconstant_1]  
+  set_property -dict [list CONFIG.CONST_VAL {1}] [get_bd_cells xlconstant_1]
 
   set_property -dict [ list \
    CONFIG.C_BUF_TYPE {IBUFDSGTE} \
   ] $util_ds_buf
 
   proc dec2bin i {
-    #returns a string, e.g. dec2bin 10 => 1010 
-    set res {} 
+    #returns a string, e.g. dec2bin 10 => 1010
+    set res {}
     while {$i>0} {
         set res [expr {$i%2}]$res
         set i [expr {$i/2}]
@@ -344,8 +344,8 @@ if {$cnfg(fdev) eq "u280" || $cnfg(fdev) eq "u55c"} {
               CONFIG.axi_bypass_64bit_en {true} \
               CONFIG.axi_bypass_prefetchable {true} \
               CONFIG.axilite_master_en {true} \
-              CONFIG.pf0_msix_cap_table_bir {BAR_2} \
-              CONFIG.pf0_msix_cap_pba_bir {BAR_2} \
+              CONFIG.pf0_msix_cap_table_bir {BAR_3:2} \
+              CONFIG.pf0_msix_cap_pba_bir {BAR_3:2} \
               CONFIG.axil_master_64bit_en {true} \
               CONFIG.axil_master_prefetchable {true} \
               CONFIG.axi_data_width {512_bit} \
@@ -372,6 +372,8 @@ if {$cnfg(fdev) eq "u280" || $cnfg(fdev) eq "u55c"} {
               CONFIG.xdma_wnum_chnl {[expr {$cnfg(n_xchan)}]} \
               CONFIG.xdma_wnum_rids {32} \
               CONFIG.xdma_rnum_rids {32} \
+              CONFIG.xdma_pcie_64bit_en {true} \
+              CONFIG.xdma_pcie_prefetchable {true} \
               CONFIG.pcie_blk_locn {PCIE4C_X1Y1} \
               CONFIG.en_ext_ch_gt_drp {true} \
             ] \$xdma_0"
@@ -529,14 +531,14 @@ if {$cnfg(fdev) eq "vcu118"} {
   connect_bd_net [get_bd_pins proc_sys_reset_1/slowest_sync_clk] [get_bd_pins xdma_0/axi_aclk]
 
   connect_bd_net -net xdma_0_axi_aresetn_ns [get_bd_pins xdma_0/axi_aresetn] [get_bd_pins proc_sys_reset_1/ext_reset_in]
-  connect_bd_net -net proc_sys_reset_1_peripheral_aresetn [get_bd_ports sresetn] [get_bd_pins proc_sys_reset_1/peripheral_aresetn]  
+  connect_bd_net -net proc_sys_reset_1_peripheral_aresetn [get_bd_ports sresetn] [get_bd_pins proc_sys_reset_1/peripheral_aresetn]
 
-  
+
 
 ########################################################################################################
 # Create address segments
 ########################################################################################################
-  
+
   create_bd_addr_seg -range 256M -offset 0x0000000000000000 [get_bd_addr_spaces xdma_0/M_AXI_BYPASS] [get_bd_addr_segs axi_main/Reg] SEG_axi_main_Reg
   create_bd_addr_seg -range 1M -offset 0x00000000 [get_bd_addr_spaces xdma_0/M_AXI_LITE] [get_bd_addr_segs axi_cnfg/Reg] SEG_axi_cnfg_Reg
 
@@ -544,7 +546,7 @@ if {$cnfg(fdev) eq "vcu118"} {
   current_bd_instance $oldCurInst
 
   save_bd_design
-  close_bd_design $design_name 
+  close_bd_design $design_name
 
   return 0
 }
