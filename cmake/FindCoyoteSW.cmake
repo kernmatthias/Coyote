@@ -1,10 +1,10 @@
 ######################################################################################
 # This file is part of the Coyote <https://github.com/fpgasystems/Coyote>
-# 
+#
 # MIT Licence
 # Copyright (c) 2025, Systems Group, ETH Zurich
 # All rights reserved.
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -145,13 +145,13 @@ else()
 endif()
 
 # Output directories
-if (NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
-endif()
-
-if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-endif()
+# if (NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+#     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
+# endif()
+#
+# if (NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+#     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+# endif()
 
 # Header includes
 set(CYT_INCLUDE_PATH ${CMAKE_CURRENT_LIST_DIR}/../sw/include)
