@@ -29,7 +29,7 @@
 ############################################
 # @brief Set-up all the necessary libs, includes and source file compile the Coyote software
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15)
 
 ##############################
 #       USER OPTIONS        #
@@ -39,6 +39,9 @@ set(EN_AVX "1" CACHE STRING "AVX enabled.")
 
 # Build with support for ROCm (AMD GPUs)
 set(EN_GPU "0" CACHE STRING "AMD GPU enabled.")
+
+# Build as shared object file
+set(EN_SO "1" CACHE STRING "Enable build as shared object file")
 
 ##############################
 #       BUILD CONFIG        #
@@ -134,7 +137,12 @@ if(EN_SIM)
     file(GLOB SIM_SOURCES "${CMAKE_CURRENT_LIST_DIR}/../sim/sw/src/*.cpp")
     list(APPEND CYT_SOURCES ${SIM_SOURCES})
 endif()
-add_library(Coyote SHARED ${CYT_SOURCES})
+
+if(EN_SO)
+    add_library(Coyote SHARED ${CYT_SOURCES})
+else()
+    add_library(Coyote STATIC ${CYT_SOURCES})
+endif()
 
 # Output directories
 if (NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
