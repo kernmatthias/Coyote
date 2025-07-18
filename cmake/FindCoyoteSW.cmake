@@ -43,6 +43,9 @@ set(EN_GPU "0" CACHE STRING "AMD GPU enabled.")
 # Build as shared object file
 set(EN_SO "1" CACHE STRING "Enable build as shared object file")
 
+# Build as shared object file
+set(EN_LIBBOOST "1" CACHE STRING "Enable linking with libboost")
+
 ##############################
 #       BUILD CONFIG        #
 #############################
@@ -161,9 +164,11 @@ endif()
 target_include_directories(Coyote PUBLIC ${CYT_INCLUDE_PATH})
 target_link_directories(Coyote PUBLIC /usr/local/lib)
 
-# Additional libraries
-find_package(Boost COMPONENTS program_options REQUIRED)
-target_link_libraries(Coyote PUBLIC ${Boost_LIBRARIES})
+if(EN_LIBBOOST)
+    # Additional libraries
+    find_package(Boost COMPONENTS program_options REQUIRED)
+    target_link_libraries(Coyote PUBLIC ${Boost_LIBRARIES})
+endif()
 
 # Additional flags, depending on AVX or GPU support
 if(EN_AVX)
