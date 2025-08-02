@@ -15,7 +15,7 @@
  * more details.
  *
  * The full GNU General Public License is included in this distribution in
- * the file called "COPYING". If not found, a copy of the GNU General Public  
+ * the file called "COPYING". If not found, a copy of the GNU General Public
  * License can be found <https://www.gnu.org/licenses/>.
  */
 
@@ -50,7 +50,7 @@ module_param(en_hmm, bool, 0000);
 MODULE_PARM_DESC(en_hmm, "Enable HMM");
 
 // Include the DMA Buffer mechanism to enable peer-to-peer DMA transfers between FPGAs and GPUs
-MODULE_IMPORT_NS(DMA_BUF);
+MODULE_IMPORT_NS("DMA_BUF");
 
 static int __init coyote_init(void) {
     pr_info("Loading Coyote PCIe driver...\n");
